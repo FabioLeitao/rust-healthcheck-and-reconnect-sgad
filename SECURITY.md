@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Any rust version after 1.75.0
+Any rust version after 1.64.0
 
 ## Reporting a Vulnerability
 
