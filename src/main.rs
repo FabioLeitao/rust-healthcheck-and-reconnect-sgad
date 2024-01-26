@@ -1,9 +1,12 @@
 extern crate oracle;
 
 use oracle::Connection;
+use std::env;
 
 fn main() {
-    let conn = Connection::connect("tosp", "Athenas2018", "10.129.48.68:1521/tosprd").unwrap();
+    let args: Vec<String> = env::args().collect();
+    let db_passwd = &args[1];
+    let conn = Connection::connect("tosp", db_passwd, "10.129.48.68:1521/tosprd").unwrap();
     {
         /*
         let (version, banner) = conn.server_version().unwrap();
