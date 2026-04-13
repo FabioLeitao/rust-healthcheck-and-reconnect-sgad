@@ -10,11 +10,18 @@ Rust utility that runs an **Oracle**-backed **health check** and, when needed, *
 
 It was written as an alternative to the **Go** and **Python** variants: to avoid newer **Go** toolchain telemetry friction and to get more predictable performance than **Python** (including 3.12.x) for this workload.
 
-### What is SGAD here?
+### Background (SGAD & TOSP)
 
-Public context (Rio de Janeiro port ecosystem): **[sgad.portosrio.gov.br](https://sgad.portosrio.gov.br/)**.
+Public SGAD context (Rio de Janeiro port ecosystem): **[sgad.portosrio.gov.br](https://sgad.portosrio.gov.br/)**.
 
-In the **TOSP** (terminal operating system) stack, **SGAD** names an operational subsystem whose **connection health** is often mirrored as configuration in **Oracle** (`CORE.cosetting`). This binary checks the target row; if the value is not `TRUE`, it runs the corresponding `UPDATE` and `COMMIT` so the flag reflects a healthy/reconnected state.
+### TOSP (Athenas TOS+)
+
+**TOSP** here means the **Athenas TOS+** terminal operating product (stack used with Oracle backends). **Vendor / product:** [athen.as/tosplus](https://athen.as/tosplus).  
+**Example production portal** (Rio Brasil Terminal, public login): [portaldeservicos.riobrasilterminal.com/tosp/Login/e/load](https://portaldeservicos.riobrasilterminal.com/tosp/Login/e/load). This repo is **not** affiliated with the vendor; links are for context only.
+
+### SGAD and `CORE.cosetting`
+
+In that stack, **SGAD** names an operational subsystem whose **connection health** is often mirrored as configuration in **Oracle** (`CORE.cosetting`). This binary checks the target row; if the value is not `TRUE`, it runs the corresponding `UPDATE` and `COMMIT` so the flag reflects a healthy/reconnected state.
 
 If you do not use TOSP, you can still read this repo as a **pattern**: query a settings table and reconcile state from a small, static binary.
 
@@ -74,11 +81,18 @@ Utilitário em **Rust** que faz **health check** contra **Oracle** e, quando nec
 
 O objetivo foi ter uma alternativa às versões em **Go** e **Python**: evitar o atrito com a **telemetria** do toolchain Go mais novo e obter desempenho mais previsível do que no **Python** (inclusive 3.12.x) para esse tipo de tarefa.
 
-### O que é o SGAD?
+### Contexto (SGAD e TOSP)
 
-Contexto público (ecossistema portuário do Rio): **[sgad.portosrio.gov.br](https://sgad.portosrio.gov.br/)**.
+Contexto público do SGAD (ecossistema portuário do Rio): **[sgad.portosrio.gov.br](https://sgad.portosrio.gov.br/)**.
 
-No cenário **TOSP** (sistema operacional de terminal portuário), **SGAD** identifica um subsistema operacional cujo **estado de conectividade** costuma ser refletido em configuração no **Oracle** (`CORE.cosetting`). Este binário consulta o registro indicado por `COSETTING_ROW_ID`; se o valor não estiver em `TRUE`, executa o `UPDATE` e o `COMMIT` para restabelecer o estado esperado.
+### TOSP (Athenas TOS+)
+
+**TOSP** aqui é o produto **Athenas TOS+** (stack de terminal com backends Oracle). **Fabricante / produto:** [athen.as/tosplus](https://athen.as/tosplus).  
+**Exemplo de portal em produção** (Rio Brasil Terminal — login público): [portaldeservicos.riobrasilterminal.com/tosp/Login/e/load](https://portaldeservicos.riobrasilterminal.com/tosp/Login/e/load). Este repositório **não** é afiliado ao fabricante; os links são só contexto.
+
+### SGAD e `CORE.cosetting`
+
+Nesse cenário, **SGAD** identifica um subsistema cujo **estado de conectividade** costuma ser refletido em configuração no **Oracle** (`CORE.cosetting`). Este binário consulta o registro indicado por `COSETTING_ROW_ID`; se o valor não estiver em `TRUE`, executa o `UPDATE` e o `COMMIT` para restabelecer o estado esperado.
 
 Se você não usa TOSP, trate o repositório como **exemplo de padrão**: consultar tabela de parâmetros e corrigir estado com binário pequeno e estático.
 
