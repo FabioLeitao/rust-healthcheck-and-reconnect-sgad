@@ -7,4 +7,3 @@ edition = "2021"
 
 [dependencies]
 oracle = { version = "0.5", features = ["chrono"] }
-sccache = "0.7.4"

@@ -12,7 +12,9 @@ It was written as an alternative to the **Go** and **Python** variants: to avoid
 
 ### What is SGAD here?
 
-In the **TOSP** (terminal operating system) stack used in port operations, **SGAD** names an operational subsystem whose **connection health** is often mirrored as configuration in **Oracle** (`CORE.cosetting`). This binary checks the target row; if the value is not `TRUE`, it runs the corresponding `UPDATE` and `COMMIT` so the flag reflects a healthy/reconnected state.
+Public context (Rio de Janeiro port ecosystem): **[sgad.portosrio.gov.br](https://sgad.portosrio.gov.br/)**.
+
+In the **TOSP** (terminal operating system) stack, **SGAD** names an operational subsystem whose **connection health** is often mirrored as configuration in **Oracle** (`CORE.cosetting`). This binary checks the target row; if the value is not `TRUE`, it runs the corresponding `UPDATE` and `COMMIT` so the flag reflects a healthy/reconnected state.
 
 If you do not use TOSP, you can still read this repo as a **pattern**: query a settings table and reconcile state from a small, static binary.
 
@@ -34,12 +36,25 @@ sudo dnf install oracle-instantclient-release-el9 libnsl libnsl2 libnsl2-devel l
 cargo build --release
 ```
 
+### Configuration (required)
+
+| Variable | Meaning |
+| -------- | ------- |
+| `ORACLE_USER` | Database user |
+| `ORACLE_CONNECT_STRING` | Oracle Easy Connect, e.g. `host:1521/SERVICE` |
+| `ORACLE_PASSWORD` | Optional if you pass the password as the **first CLI argument** instead |
+| `COSETTING_ROW_ID` | Optional; defaults to `681` (numeric row in `CORE.cosetting`) |
+
+Copy `.env.example` to `.env` (gitignored) or export variables in your shell. **Do not** commit real hostnames, users, or passwords.
+
 ### Run
 
-The password is passed as the **first CLI argument**. The **user**, **connect descriptor** (host/port/service), and **SQL** are still embedded in `src/main.rs` in this prototype—replace them for your environment, or fork to read `ORACLE_*` environment variables before production use.
-
 ```bash
-./target/release/rust-healthcheck-and-reconnect-sgad '<database_password>'
+export ORACLE_USER='…'
+export ORACLE_CONNECT_STRING='host:1521/ORCL'
+./target/release/rust-healthcheck-and-reconnect-sgad
+# or: ORACLE_PASSWORD='…' ./target/release/rust-healthcheck-and-reconnect-sgad
+# or pass password only as argv: ./target/release/rust-healthcheck-and-reconnect-sgad '…'
 ```
 
 ### libc / portability
@@ -61,7 +76,9 @@ O objetivo foi ter uma alternativa às versões em **Go** e **Python**: evitar o
 
 ### O que é o SGAD?
 
-No cenário **TOSP** (sistema operacional de terminal portuário), **SGAD** identifica um subsistema operacional cujo **estado de conectividade** costuma ser refletido em configuração no **Oracle** (`CORE.cosetting`). Este binário consulta o registro configurado no código; se o valor não estiver em `TRUE`, executa o `UPDATE` e o `COMMIT` para restabelecer o estado esperado (fluxo “verificar + reconectar” materializado em dado de configuração).
+Contexto público (ecossistema portuário do Rio): **[sgad.portosrio.gov.br](https://sgad.portosrio.gov.br/)**.
+
+No cenário **TOSP** (sistema operacional de terminal portuário), **SGAD** identifica um subsistema operacional cujo **estado de conectividade** costuma ser refletido em configuração no **Oracle** (`CORE.cosetting`). Este binário consulta o registro indicado por `COSETTING_ROW_ID`; se o valor não estiver em `TRUE`, executa o `UPDATE` e o `COMMIT` para restabelecer o estado esperado.
 
 Se você não usa TOSP, trate o repositório como **exemplo de padrão**: consultar tabela de parâmetros e corrigir estado com binário pequeno e estático.
 
@@ -83,12 +100,24 @@ sudo dnf install oracle-instantclient-release-el9 libnsl libnsl2 libnsl2-devel l
 cargo build --release
 ```
 
+### Configuração (obrigatório)
+
+| Variável | Significado |
+| -------- | ----------- |
+| `ORACLE_USER` | Usuário do banco |
+| `ORACLE_CONNECT_STRING` | Easy Connect, ex.: `host:1521/SERVICO` |
+| `ORACLE_PASSWORD` | Opcional se a senha for passada como **primeiro argumento** |
+| `COSETTING_ROW_ID` | Opcional; padrão `681` |
+
+Use `.env.example` como modelo. **Não** commite host real, usuário ou senha.
+
 ### Executar
 
-A **senha** do banco é passada como **primeiro argumento** na linha de comando. **Usuário**, **string de conexão** (host/porta/serviço) e **SQL** ainda estão fixos em `src/main.rs` neste protótipo—substitua pelo seu ambiente ou evolua o código para ler variáveis `ORACLE_*` antes de uso em produção.
-
 ```bash
-./target/release/rust-healthcheck-and-reconnect-sgad '<senha_do_banco>'
+export ORACLE_USER='…'
+export ORACLE_CONNECT_STRING='host:1521/ORCL'
+./target/release/rust-healthcheck-and-reconnect-sgad
+# ou senha por argv: ./target/release/rust-healthcheck-and-reconnect-sgad '…'
 ```
 
 ### libc e portabilidade
